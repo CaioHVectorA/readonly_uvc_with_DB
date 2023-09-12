@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type Episodio {
+  Nome   String
+  Ref    String
+  Numero Int
+}
+
+type Capitulo {
+  Nome       String
+  Disponivel Boolean
+  NumEps     Int
+  DescCap    String
+  Episodios  Episodio[]
+}
+
+type Relacionado {
+  Ref  String
+  Nome String
+  Img  String
+}
+
+model Serie {
+  Nome         String
+  Descricao    String
+  Escrito      String
+  Ref          String        @unique
+  id           String        @id @default(uuid()) @map("_id")
+  Data         String
+  Status       String
+  Categorias   String[]
+  Relacionados Relacionado[]
+  Capitulos    Capitulo[]
+}
+
+model Solo {
+  Nome          String
+  Descricao     String
+  Escrito       String
+  Ref           String
+  Data          String
+  Status        String
+  Categorias    String[]
+  Relacionados  Relacionado[]
+  isAlternative Boolean
+  id            String        @id @default(uuid()) @map("_id")
+}
+
+model Character {
+  Nome         String
+  Apelido      String
+  Imgs         String[]
+  Aparicoes    Relacionado[]
+  Biografia    String
+  Poderes      String
+  Curiosidades String?
+  Color        String
+  isHero       Boolean
+  id           String        @id @default(uuid()) @map("_id")
+  Equipe       String?
+  Local        String
+}
